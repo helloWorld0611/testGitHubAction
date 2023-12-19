@@ -4,5 +4,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo Hello world
-      - run: java --version
+      - name: start flow
+        run: java --version
+      - run: mvn --version
