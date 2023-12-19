@@ -1,0 +1,9 @@
+name: test workFlow
+on: workflow_dispatch
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start job
+      - run: echo Hello world
+      - run: java --version
