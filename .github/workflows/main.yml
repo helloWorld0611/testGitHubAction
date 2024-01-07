@@ -4,6 +4,8 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        run: actions/checkout@v3
       - name: start flow
         run: java --version
       - run: mvn --version
