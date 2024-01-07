@@ -47,9 +47,7 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-        with:
-          name: page
-          path: .
+      - run: ls -la
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
