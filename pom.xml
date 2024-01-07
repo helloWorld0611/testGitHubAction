@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>yapetproject</artifactId>
+    <artifactId>testGitHubAction</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <postgresql.version>42.7.0</postgresql.version>
