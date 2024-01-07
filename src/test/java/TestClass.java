@@ -2,6 +2,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Random;
+
 public class TestClass {
 
     Random rd = new Random();
