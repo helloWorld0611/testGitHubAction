@@ -1,4 +1,4 @@
-name: test workFlow
+name: run regression
 on: workflow_dispatch
 jobs: 
   run-test:
