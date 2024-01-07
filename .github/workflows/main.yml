@@ -1,9 +1,12 @@
 name: test workFlow
 on: workflow_dispatch
 jobs: 
-  build:
+  run-test:
     runs-on: ubuntu-latest
     steps:
       - name: start flow
         run: java --version
       - run: mvn --version
+      - name: run test and generate allure report
+        run: mvn clean test
+  
