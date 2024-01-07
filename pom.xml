@@ -16,6 +16,7 @@
         <allure.results.directory>target/allure-results</allure.results.directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <allure.version>2.24.0</allure.version>
+        <project.build.directory>${basedir}/target/allure-report</project.build.directory>
     </properties>
 
     <build>
