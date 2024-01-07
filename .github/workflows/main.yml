@@ -2,6 +2,7 @@ name: run regression
 on: [push]
 jobs: 
   run-test:
+    name: Run regression test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -13,9 +14,37 @@ jobs:
         continue-on-error: true
         run: mvn clean test
       - run: ls -la
-      - name: Store allure results 
+      - name: Upload allure results
         uses: actions/upload-artifact@v3
         with: 
           name: allure-results
           path: allure-results
-          retention-days: 2
+          retention-days: 1
+  generate-report:
+    needs: run-test
+    name: Generate report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: action/download-artifact@v3
+      - run: allure generate -c allure-results -o _site
+      - name: Upload generated report
+        uses: actions/upload-artifact@v3
+        with:
+          name: _site
+          path: _site
+          retention-days: 1
+
+  publish-report:
+    needs: generate-report
+    name: Publish report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: action/download-artifact@v3
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v2
+      - name: Deploy to gitHub pages
+        id: deployment
+        uses: actions/deploy-pages@v1.2.9
+
