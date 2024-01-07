@@ -27,6 +27,7 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
+      - run: allure --version
       - run: allure generate -c allure-results -o _site
       - name: Upload generated report
         uses: actions/upload-artifact@v3
