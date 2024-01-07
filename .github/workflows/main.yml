@@ -37,6 +37,10 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
 
+
+      - run: mkdir -p /target && cp -r /allure-results $_
+
+
       - run: wget https://mirrors.estointernet.in/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
       - run: tar -xvf apache-maven-3.6.3-bin.tar.gz
       - run: mv apache-maven-3.6.3 /opt/
