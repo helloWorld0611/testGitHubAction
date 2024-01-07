@@ -1,6 +1,6 @@
 name: run regression
 
-on: [push, workflow_dispatch]
+on: workflow_dispatch
 
 
 permissions:
@@ -16,16 +16,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: start flow
-        run: java --version
-      - run: mvn --version
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
-
-      - run: ls -la
-      - run: cd target && ls -la
-
       - name: Upload allure report
         uses: actions/upload-artifact@v4
         with: 
@@ -35,19 +28,17 @@ jobs:
 
   generate-report:
     needs: run-test
-    name: Generate report
+    name: Generate allure report
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      actions: write
-
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
-      - run: sudo dpkg -i allure_2.18.1-1_all.deb
-      - run: allure generate
-      - run: ls -la
+      - name: Download allure from repository
+        run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
+      - name: Install allure
+        run: sudo dpkg -i allure_2.18.1-1_all.deb
+      - name: Generate allure report
+        run: allure generate
       - name: Upload generated report
         uses: actions/upload-artifact@v4
         with:
@@ -62,12 +53,11 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-      - run: ls -la
-      - name: Upload pages artifact
+      - name: Upload allure report
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./allure-report
-      - name: Deploy to gitHub pages
+      - name: Deploy allure report to gitHub pages
         id: deployment
         uses: actions/deploy-pages@v1.2.9
 
