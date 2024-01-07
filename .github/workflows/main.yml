@@ -12,5 +12,9 @@ jobs:
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
-      - name: Generate report  
-        run: allure generate -c allure-results -o _site
+      - name: Store allure results 
+        uses: actions/upload-artifatc@v3
+        with: 
+          name:
+            allure-results
+          retention-days: 1
