@@ -25,14 +25,14 @@ jobs:
       - run: mvn allure::report
 
       - run: ls -la
-      - run: cd target
+      - run: cd /target
       - run: ls -la
 
       - name: Upload allure report
         uses: actions/upload-artifact@v4
         with: 
-          name: allure-report
-          path: target/allure-report
+          name: target
+          path: target
           retention-days: 1
 #  generate-report:
 #    needs: run-test
