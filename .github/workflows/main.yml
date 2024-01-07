@@ -5,7 +5,7 @@ on: [push, workflow_dispatch]
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
   pages: write
 
 
@@ -33,6 +33,10 @@ jobs:
     needs: run-test
     name: Generate report
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: write
+
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
