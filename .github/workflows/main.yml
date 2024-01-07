@@ -1,7 +1,13 @@
 name: run regression
+
 on: [push]
+
 permissions:
   id-token: write
+  contents: read
+  pages: write
+
+
 jobs: 
   run-test:
     name: Run regression test
