@@ -41,6 +41,7 @@ jobs:
         run: sudo dpkg -i allure_2.18.1-1_all.deb
       - run: allure --version
       - run: allure generate -c allure-results -o _site
+      - run: allure serve
       - name: Upload generated report
         uses: actions/upload-artifact@v3
         with:
