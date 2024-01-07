@@ -12,6 +12,7 @@ jobs:
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
+      - run: ls -la
       - name: Store allure results 
         uses: actions/upload-artifact@v3
         with: 
