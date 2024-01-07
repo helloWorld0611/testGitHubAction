@@ -49,8 +49,8 @@ jobs:
 
       - run: ls -la
 
-      - run: wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
-      - run: dpkg -i allure_2.18.1-1_all.deb
+      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
+      - run: sudo dpkg -i allure_2.18.1-1_all.deb
 
       - run: allure generate
 
