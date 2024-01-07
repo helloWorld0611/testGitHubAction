@@ -27,8 +27,10 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
+      - name: Download allure
+        run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
       - name: Install allure
-        run: wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
+        run: sudo dpkg -i allure_2.18.1-1_all.deb
       - run: allure --version
       - run: allure generate -c allure-results -o _site
       - name: Upload generated report
