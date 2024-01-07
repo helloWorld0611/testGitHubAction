@@ -2,12 +2,10 @@ name: run regression
 
 on: workflow_dispatch
 
-
 permissions:
   id-token: write
   contents: write
   pages: write
-
 
 jobs: 
   run-test:
@@ -60,4 +58,3 @@ jobs:
       - name: Deploy allure report to gitHub pages
         id: deployment
         uses: actions/deploy-pages@v1.2.9
-
