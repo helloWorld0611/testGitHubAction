@@ -4,17 +4,31 @@ import org.testng.annotations.Test;
 
 public class TestClass {
 
-    @BeforeClass
-    public void before(){
-        System.out.println("\tBEFORE CLASS\t");
-    }
+    Random rd = new Random();
+
+
     @Test
-    public void test(){
-        System.out.println("\n\n\t\tTEST IS DONE\t\t\n\n");
+    public void test1(){
+        Assert.assertTrue(rd.nextBoolean());
     }
 
-    @AfterClass
-    public void after(){
-        System.out.println("\tAFTER CLASS\t");
+    @Test
+    public void test2(){
+        Assert.assertTrue(rd.nextBoolean());
+    }
+
+    @Test
+    public void test3(){
+        Assert.assertTrue(rd.nextBoolean());
+    }
+
+    @Test
+    public void test4(){
+        Assert.assertTrue(rd.nextBoolean());
+    }
+
+    @Test
+    public void test5(){
+        Assert.assertTrue(rd.nextBoolean());
     }
 }
