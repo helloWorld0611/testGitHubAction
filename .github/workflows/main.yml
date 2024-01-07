@@ -9,6 +9,6 @@ jobs:
       - name: start flow
         run: java --version
       - run: mvn --version
-      # - name: run test and generate allure report
-      #   run: mvn clean test
+      - name: run test and generate allure report
+        run: mvn clean test
   
