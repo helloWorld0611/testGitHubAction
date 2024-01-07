@@ -44,22 +44,14 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-
-      - run: mvn --version
-
-      - run: ls -la
-
       - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
       - run: sudo dpkg -i allure_2.18.1-1_all.deb
-
       - run: allure generate
-
       - run: ls -la
-
       - name: Upload generated report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: _site
+          name: allure-report
           path: allure-report
           retention-days: 1
 
@@ -74,7 +66,7 @@ jobs:
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./target/allure-report
+          path: ./allure-report
       - name: Deploy to gitHub pages
         id: deployment
         uses: actions/deploy-pages@v1.2.9
