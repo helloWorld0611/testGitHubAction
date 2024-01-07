@@ -1,5 +1,5 @@
 name: run regression
-on: workflow_dispatch
+on: [push]
 jobs: 
   run-test:
     runs-on: ubuntu-latest
