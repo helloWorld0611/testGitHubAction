@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: _site
-          path: _site
+          path: allure-report
           retention-days: 1
 
   publish-report:
