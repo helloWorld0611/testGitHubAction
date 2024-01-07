@@ -1,5 +1,7 @@
 name: run regression
 on: [push]
+permissions:
+  id-token: write
 jobs: 
   run-test:
     name: Run regression test
