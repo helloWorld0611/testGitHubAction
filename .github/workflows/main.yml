@@ -13,7 +13,7 @@ jobs:
         continue-on-error: true
         run: mvn clean test
       - name: Store allure results 
-        uses: actions/upload-artifatc@v3
+        uses: actions/upload-artifact@v3
         with: 
           name:
             allure-results
