@@ -75,6 +75,7 @@ jobs:
       - name: Generate allure report
         run: allure generate
       - run: ls -la
+      - run: cd /allure-results | ls -la
     
       # - name: Upload generated report
       #   uses: actions/upload-artifact@v4
