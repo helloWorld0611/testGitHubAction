@@ -7,8 +7,22 @@ permissions:
   contents: write
   pages: write
 
-jobs: 
+jobs:
+  download-history:
+    name: Download allure history
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Get Allure history
+      uses: actions/checkout@v2
+      if: always()
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages
+    - run: ls -l
+      
   run-test:
+    needs: download-history
     name: Run regression test
     runs-on: ubuntu-latest
     steps:
