@@ -20,6 +20,8 @@ jobs:
         ref: gh-pages
         path: gh-pages
     - run: ls -l
+    - run: cd ./gh-pages
+    - run: ls -l
       
   run-test:
     needs: download-history
