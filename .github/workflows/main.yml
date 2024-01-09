@@ -32,18 +32,28 @@ jobs:
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
-      - name: Allure Report action from marketplace
-        uses: simple-elf/allure-report-action@master  
-        if: always()
-        id: allure-report
-        with:
-          allure_results: target/allure-results
-          # gh_pages: gh-pages
-          # allure_report: allure-report
-          allure_history: allure-history
+      - run: ls -l
+      - run: cd ./target
+      - run: ls -l
+      - name: Upload allure report
+        uses: actions/upload-artifact@v4
+        with: 
+          name: allure-results
+          path: target/allure-results
+          retention-days: 1
+          
+      # - name: Allure Report action from marketplace
+      #   uses: simple-elf/allure-report-action@master  
+      #   if: always()
+      #   id: allure-report
+      #   with:
+      #     allure_results: target/allure-results
+      #     # gh_pages: gh-pages
+      #     # allure_report: allure-report
+      #     allure_history: allure-history
           
   publish-report:
-    needs: run-test
+    needs: generate-report
     runs-on: ubuntu-latest
     steps:
       - name: Deploy report to Github Pages
@@ -52,36 +62,35 @@ jobs:
         env:
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
-      # - run: ls -l
-      # - run: cd ./target
-      # - run: ls -l
-      # - name: Upload allure report
+
+  generate-report:
+    needs: run-test
+    name: Generate allure report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+      - name: Download allure from repository
+        run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
+      - name: Install allure
+        run: sudo dpkg -i allure_2.18.1-1_all.deb
+      - name: Generate allure report
+        run: allure generate
+      # - name: Upload generated report
       #   uses: actions/upload-artifact@v4
-      #   with: 
-      #     name: allure-results
-      #     path: target/allure-results
+      #   with:
+      #     name: allure-report
+      #     path: allure-report
       #     retention-days: 1
-
-  # generate-report:
-  #   needs: run-test
-  #   name: Generate allure report
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download artifacts
-  #       uses: actions/download-artifact@v4
-  #     - name: Download allure from repository
-  #       run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
-  #     - name: Install allure
-  #       run: sudo dpkg -i allure_2.18.1-1_all.deb
-  #     - name: Generate allure report
-  #       run: allure generate
-  #     - name: Upload generated report
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: allure-report
-  #         path: allure-report
-  #         retention-days: 1
-
+      - name: Allure Report action from marketplace
+        uses: simple-elf/allure-report-action@master  
+        if: always()
+        id: allure-report
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-results/allure-history
   # publish-report:
   #   needs: generate-report
   #   name: Publish report
