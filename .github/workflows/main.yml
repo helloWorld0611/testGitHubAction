@@ -42,7 +42,7 @@ jobs:
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
-      - run: aws s3 cp s3://$S3_BUCKET/history/ allure-results/history/ --recursive
+      - run: aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/history/ allure-results/history/ --recursive
       - run: ls -la
       - name: Upload generated report
         uses: actions/upload-artifact@v4
