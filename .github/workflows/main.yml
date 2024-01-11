@@ -23,9 +23,17 @@ jobs:
           name: allure-results
           path: target/allure-results
           retention-days: 1
-
-  generate-report:
+      
+  upload_history_to_S3:
     needs: run-test
+    name: Upload to S3
+    runs-on: amazon/aws-cli
+    steps:
+      - run: aws --version
+      - run: aws s3 cp target/allure-report/history/ s3://$S3_BUCKET/history/ --recursive
+      
+  generate-report:
+    needs: upload_history_to_S3
     name: Generate allure report
     runs-on: ubuntu-latest
     steps:
