@@ -86,8 +86,8 @@ jobs:
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
       - run: ls -la
-      # - run: aws s3 rm --recursive s3://${{ env.S3_BUCKET_NAME }} 
-      - run: aws s3 cp ./allure-report s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
+      - run: aws s3 rm --recursive s3://${{ env.S3_BUCKET_NAME }} 
+      - run: aws s3 cp ./allure-report/history s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
     
 
   publish-report:
