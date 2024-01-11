@@ -27,8 +27,8 @@ jobs:
       - name: Upload allure report
         uses: actions/upload-artifact@v4
         with: 
-          name: allure-results
-          path: target/allure-results
+          name: allure-report
+          path: target/allure-report
           retention-days: 1
       
   upload_history_to_S3:
@@ -49,30 +49,30 @@ jobs:
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
-      - run: aws s3 cp target/allure-report/history/ s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
+      - run: aws s3 cp allure-report s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
       
-  generate-report:
-    needs: upload_history_to_S3
-    name: Generate allure report
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-      - name: Download allure from repository
-        run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
-      - name: Install allure
-        run: sudo dpkg -i allure_2.18.1-1_all.deb
-      - name: Generate allure report
-        run: allure generate
-      - name: Upload generated report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
-          retention-days: 1
+  # generate-report:
+  #   needs: upload_history_to_S3
+  #   name: Generate allure report
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download artifacts
+  #       uses: actions/download-artifact@v4
+  #     - name: Download allure from repository
+  #       run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
+  #     - name: Install allure
+  #       run: sudo dpkg -i allure_2.18.1-1_all.deb
+  #     - name: Generate allure report
+  #       run: allure generate
+  #     - name: Upload generated report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: allure-report
+  #         path: allure-report
+  #         retention-days: 1
 
   publish-report:
-    needs: generate-report
+    needs: upload_history_to_S3
     name: Publish report
     runs-on: ubuntu-latest
     steps:
