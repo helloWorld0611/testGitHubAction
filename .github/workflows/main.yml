@@ -36,6 +36,9 @@ jobs:
       AWS_DEFAULT_REGION: us-west-1
       AWS_EC2_METADATA_DISABLED: "true"
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+      - run: ls -la
       - name: Checkout
         uses: actions/checkout@v3
       - id: install-aws-cli
