@@ -22,14 +22,18 @@ jobs:
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
-      - run: mvn allure::report
-      - working-directory: ./target
-        run: ls -la
+      - name: Download allure from repository
+        run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
+      - name: Install allure
+        run: sudo dpkg -i allure_2.18.1-1_all.deb
+      - name: Generate allure report
+        run: allure generate
+      - run: ls -la
       - name: Upload allure report
         uses: actions/upload-artifact@v4
         with: 
           name: allure-report
-          path: target/allure-report
+          path: allure-report
           retention-days: 1
       
   upload_history_to_S3:
