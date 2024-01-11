@@ -34,7 +34,7 @@ jobs:
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
-      - run: aws s3 cp target/allure-report/history/ s3://$S3_BUCKET/history/ --recursive
+      - run: aws s3 cp target/allure-report/history/ s3://${{ secrets.S3_BUCKET }}/history/ --recursive
       
   generate-report:
     needs: upload_history_to_S3
