@@ -42,7 +42,7 @@ jobs:
       - name: AWS version
         run: aws --version
       - name: Download history from S3 Bucket
-      - run: aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/history/ history --recursive
+        run: aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/history/ history --recursive
       - name: Upload generated report
         uses: actions/upload-artifact@v4
         with:
@@ -62,7 +62,7 @@ jobs:
       - name: Install allure
         run: sudo dpkg -i allure_2.18.1-1_all.deb
       - name: Copy history from S3 Bucker to allure-results
-      - run: cp -rf ./history ./allure-results/history
+        run: cp -rf ./history ./allure-results/history
       - name: Generate allure report
         run: allure generate
       - name: Upload generated report
