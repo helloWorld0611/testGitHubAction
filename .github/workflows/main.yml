@@ -9,8 +9,6 @@ permissions:
 
 env: 
   S3_BUCKET_NAME: githuballurehistory
-  MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=./.m2/repository"
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
 
 jobs: 
   run-test:
@@ -22,24 +20,59 @@ jobs:
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
+      - name: Upload allure report
+        uses: actions/upload-artifact@v4
+        with: 
+          name: allure-result
+          path: target/allure-result
+          retention-days: 1
+          
+  download_history_from_S3:
+    needs: run-test
+    name: Download from S3
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-west-1
+      AWS_EC2_METADATA_DISABLED: "true"
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+      - id: install-aws-cli
+        uses: unfor19/install-aws-cli-action@master
+      - run: aws --version
+      - run: aws s3 cp s3://$S3_BUCKET/history/ allure-results/history/ --recursive
+      - run: ls -la
+      - name: Upload generated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 1
+          
+  generate-report:
+    needs: download_history_from_S3
+    name: Generate allure report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
       - name: Download allure from repository
         run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
       - name: Install allure
         run: sudo dpkg -i allure_2.18.1-1_all.deb
       - name: Generate allure report
-        working-directory: ./target
         run: allure generate
-      - working-directory: ./target
-        run: ls -la
-      - name: Upload allure report
+      - name: Upload generated report
         uses: actions/upload-artifact@v4
-        with: 
+        with:
           name: allure-report
-          path: target/allure-report
+          path: allure-report
           retention-days: 1
-      
+  
   upload_history_to_S3:
-    needs: run-test
+    needs: generate-report
     name: Upload to S3
     runs-on: ubuntu-latest
     env:
@@ -50,35 +83,13 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-      - run: ls -la
-      # - name: Checkout
-      #   uses: actions/checkout@v3
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
       - run: ls -la
       - run: aws s3 rm --recursive s3://${{ env.S3_BUCKET_NAME }} 
       - run: aws s3 cp ./allure-report s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
-      
-  # generate-report:
-  #   needs: upload_history_to_S3
-  #   name: Generate allure report
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download artifacts
-  #       uses: actions/download-artifact@v4
-  #     - name: Download allure from repository
-  #       run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
-  #     - name: Install allure
-  #       run: sudo dpkg -i allure_2.18.1-1_all.deb
-  #     - name: Generate allure report
-  #       run: allure generate
-  #     - name: Upload generated report
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: allure-report
-  #         path: allure-report
-  #         retention-days: 1
+    
 
   publish-report:
     needs: upload_history_to_S3
