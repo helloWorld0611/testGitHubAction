@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: run test and generate allure report
+      - name: Run test and generate allure report
         continue-on-error: true
         run: mvn clean test
       - name: Upload allure report
@@ -39,7 +39,9 @@ jobs:
     steps:
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
-      - run: aws --version
+      - name: AWS version
+        run: aws --version
+      - name: Download history from S3 Bucket
       - run: aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/history/ history --recursive
       - name: Upload generated report
         uses: actions/upload-artifact@v4
@@ -59,6 +61,7 @@ jobs:
         run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
       - name: Install allure
         run: sudo dpkg -i allure_2.18.1-1_all.deb
+      - name: Copy history from S3 Bucker to allure-results
       - run: cp -rf ./history ./allure-results/history
       - name: Generate allure report
         run: allure generate
@@ -83,9 +86,10 @@ jobs:
         uses: actions/download-artifact@v4
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
-      - run: aws --version
-      # - run: aws s3 rm --recursive s3://${{ env.S3_BUCKET_NAME }} 
-      - run: aws s3 cp ./allure-report/history s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
+      - name: AWS version
+        run: aws --version
+      - name: Upload history to S3 Bucket
+        run: aws s3 cp ./allure-report/history s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
     
 
   publish-report:
