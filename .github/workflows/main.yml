@@ -37,12 +37,16 @@ jobs:
       AWS_DEFAULT_REGION: us-west-1
       AWS_EC2_METADATA_DISABLED: "true"
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
-      - run: aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/history/ allure-results/history/ --recursive
+      - run: aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/history/ history --recursive
+      - name: Upload generated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: history
+          path: history
+          retention-days: 1
           
   generate-report:
     needs: download_history_from_S3
@@ -55,6 +59,8 @@ jobs:
         run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.18.1/allure_2.18.1-1_all.deb
       - name: Install allure
         run: sudo dpkg -i allure_2.18.1-1_all.deb
+      - run: ls -la
+      - run: cp -R ./history ./allure-results/history
       - name: Generate allure report
         run: allure generate
       - name: Upload generated report
