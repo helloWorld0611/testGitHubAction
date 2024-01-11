@@ -9,6 +9,9 @@ permissions:
 
 env: 
   S3_BUCKET_NAME: githuballurehistory
+  MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=./.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+
 jobs: 
   run-test:
     name: Run regression test
@@ -19,6 +22,8 @@ jobs:
       - name: run test and generate allure report
         continue-on-error: true
         run: mvn clean test
+      - run: mvn allure::report
+        continue-on-error: true
       - name: Upload allure report
         uses: actions/upload-artifact@v4
         with: 
