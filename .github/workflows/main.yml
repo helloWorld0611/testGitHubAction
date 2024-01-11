@@ -7,6 +7,8 @@ permissions:
   contents: write
   pages: write
 
+env: 
+  S3_BUCKET_NAME: githuballurehistory
 jobs: 
   run-test:
     name: Run regression test
@@ -28,13 +30,17 @@ jobs:
     needs: run-test
     name: Upload to S3
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-west-1
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
       - run: aws --version
-      - run: aws s3 cp target/allure-report/history/ s3://githuballurehistory/history/ --recursive
+      - run: aws s3 cp target/allure-report/history/ s3://${{ env.S3_BUCKET_NAME }}/history/ --recursive
       
   generate-report:
     needs: upload_history_to_S3
