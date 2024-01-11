@@ -60,7 +60,7 @@ jobs:
       - name: Install allure
         run: sudo dpkg -i allure_2.18.1-1_all.deb
       - run: ls -la
-      - run: cp -R ./history ./allure-results/history
+      - run: cp -f ./history ./allure-results/history
       - name: Generate allure report
         run: allure generate
       - name: Upload generated report
