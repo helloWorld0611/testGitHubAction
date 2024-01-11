@@ -27,7 +27,7 @@ jobs:
   upload_history_to_S3:
     needs: run-test
     name: Upload to S3
-    runs-on: amazon/aws-cli
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
